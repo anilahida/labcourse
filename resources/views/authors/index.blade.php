@@ -23,9 +23,9 @@
             
             <td>
     @if($author->foto_autori)
-        <img src="{{ asset('images/' . $author->foto_autori) }}" width="80" alt="Foto e autorit">
+        <img src="/labcourse/public/images/{{ $author->foto_autori }}" width="80" style="border-radius: 5px;">
     @else
-        <span>Nuk ka foto</span>
+        <span>Pa foto</span>
     @endif
 </td>
 
