@@ -1,17 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\AuthorController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,7 +11,5 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-use App\Http\Controllers\AuthorController;
-
-// Kjo rrugë lidh URL-në /authors me funksionin index në Controller
-Route::get('/authors', [AuthorController::class, 'index']);
+// Ky rresht i krijon 7 rrugë (index, create, store, edit, update, show, destroy)
+Route::resource('authors', AuthorController::class);

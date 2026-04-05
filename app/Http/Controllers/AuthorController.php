@@ -21,15 +21,36 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        //
+        return view('authors.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        //
+        // 1. Krijojmë një objekt të ri nga Modeli Author
+        $author = new \App\Models\Author();
+        $author->emri = $request->input('emri');
+        $author->mbiemri = $request->input('mbiemri');
+        $author->biografia = $request->input('biografia');
+
+        // 2. Logjika për ruajtjen e fotos
+        if ($request->hasFile('foto_autori')) {
+            $file = $request->file('foto_autori');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move('images/', $filename); // E dërgon foton te public/images/
+            $author->foto_autori = $filename; // Ruajmë vetëm emrin e skedarit në DB
+        }
+
+        // 3. Ruajtja përfundimtare në Databazë
+        $author->save();
+
+        // 4. Kthehemi te lista kryesore me një mesazh suksesi
+        return redirect('authors')->with('success', 'Autori u shtua me sukses!');
     }
 
     /**
@@ -59,8 +80,15 @@ class AuthorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy($id)
+{
+    // Gjejmë autorin sipas ID-së dhe e fshijmë
+    $author = \App\Models\Author::where('author_id', $id)->first();
+    
+    if($author) {
+        $author->delete();
     }
+
+    return redirect('authors')->with('success', 'Autori u fshi me sukses!');
+}
 }
