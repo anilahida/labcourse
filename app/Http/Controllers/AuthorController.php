@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 1. Shfaqja e listës së autorëve (Read)
      */
     public function index()
     {
-        $authors = \App\Models\Author::all();
-
+        $authors = Author::all();
         return view('authors.index', compact('authors'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 2. Hapja e formës për krijim (Create)
      */
     public function create()
     {
@@ -25,70 +25,77 @@ class AuthorController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    /**
-     * Store a newly created resource in storage.
+     * 3. Ruajtja e autorit të ri në Databazë (Store)
      */
     public function store(Request $request)
     {
-        // 1. Krijojmë një objekt të ri nga Modeli Author
-        $author = new \App\Models\Author();
+        $author = new Author();
         $author->emri = $request->input('emri');
         $author->mbiemri = $request->input('mbiemri');
         $author->biografia = $request->input('biografia');
 
-        // 2. Logjika për ruajtjen e fotos
         if ($request->hasFile('foto_autori')) {
             $file = $request->file('foto_autori');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move('images/', $filename); // E dërgon foton te public/images/
-            $author->foto_autori = $filename; // Ruajmë vetëm emrin e skedarit në DB
+            $file->move('images/', $filename);
+            $author->foto_autori = $filename;
         }
 
-        // 3. Ruajtja përfundimtare në Databazë
         $author->save();
-
-        // 4. Kthehemi te lista kryesore me një mesazh suksesi
         return redirect('authors')->with('success', 'Autori u shtua me sukses!');
     }
 
     /**
-     * Display the specified resource.
+     * 4. Shfaqja e formës për editim (Edit)
      */
-    public function show(string $id)
+    public function edit($id)
     {
-        //
+        $author = Author::find($id);
+        return view('authors.edit', compact('author'));
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 5. Përditësimi i të dhënave ekzistuese (Update)
      */
-    public function edit(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $author = Author::find($id);
+        
+        $author->emri = $request->input('emri');
+        $author->mbiemri = $request->input('mbiemri');
+        $author->biografia = $request->input('biografia');
+
+        if ($request->hasFile('foto_autori')) {
+            $file = $request->file('foto_autori');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move('images/', $filename);
+            $author->foto_autori = $filename;
+        }
+
+        $author->save();
+        return redirect('authors')->with('success', 'Të dhënat u përditësuan me sukses!');
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * 6. Fshirja e autorit (Delete)
      */
     public function destroy($id)
-{
-    // Gjejmë autorin sipas ID-së dhe e fshijmë
-    $author = \App\Models\Author::where('author_id', $id)->first();
-    
-    if($author) {
-        $author->delete();
+    {
+        $author = Author::find($id);
+        
+        if($author) {
+            $author->delete();
+        }
+
+        return redirect('authors')->with('success', 'Autori u fshi me sukses!');
     }
 
-    return redirect('authors')->with('success', 'Autori u fshi me sukses!');
-}
+    /**
+     * Opsionale: Shfaqja e një autori specifik
+     */
+    public function show($id)
+    {
+        $author = Author::find($id);
+        return view('authors.show', compact('author'));
+    }
 }
