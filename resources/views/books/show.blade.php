@@ -18,11 +18,17 @@
                     <a href="{{ route('books.index') }}" class="btn btn-outline-secondary w-100 mt-3">Kthehu te Lista</a>
 
                     @auth
+                        {{-- Butoni i Blerjes --}}
+                        <a href="{{ route('checkout', $book->book_id) }}" class="btn btn-success w-100 mt-2">
+                             Bli kete liber
+                        </a>
+
+                        {{-- Butoni i Wishlist --}}
                         <form action="{{ route('wishlist.store') }}" method="POST" class="mt-2">
                             @csrf
                             <input type="hidden" name="book_id" value="{{ $book->book_id }}">
                             <button type="submit" class="btn btn-danger w-100">
-                                <i class="fa fa-heart"></i> Shto në List
+                                Shto ne List
                             </button>
                         </form>
                     @endauth
@@ -47,7 +53,6 @@
                             <h6 class="mt-2 mb-1 fw-bold">{{ $review->user->name ?? 'Përdorues i paidentifikuar' }}</h6>
                             <p class="mb-0 text-secondary">{{ $review->komenti }}</p>
                             
-                            {{-- Butonat Update/Delete për Review --}}
                             @if(auth()->id() == $review->user_id)
                                 <div class="mt-2">
                                     <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="d-inline">
@@ -94,7 +99,7 @@
                 </div>
             @else
                 <div class="alert alert-light border text-center">
-                    Duhet të jeni të <a href="{{ route('login') }}">loguar</a> për të lënë një vlerësim ose për të shtuar në Wishlist.
+                    Duhet të jeni të loguar për të lënë një vlerësim.
                 </div>
             @endauth
         </div>
