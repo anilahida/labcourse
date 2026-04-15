@@ -9,17 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
 {
-    Schema::create('wishlists', function (Blueprint $table) {
+    Schema::create('reviews', function (Blueprint $table) {
         $table->id();
-        // Lidhja me përdoruesit
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        
-        // Lidhja me librat (përdorim book_id siç e kemi në tabelën books)
+        // Lidhja me librin (referencë te book_id)
         $table->unsignedBigInteger('book_id');
         $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
         
+        // Lidhja me përdoruesin (kush e bën vlerësimin)
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        
+        $table->integer('nota'); // 1 deri 5
+        $table->text('komenti')->nullable();
         $table->timestamps();
     });
 }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wishlists');
+        Schema::dropIfExists('reviews');
     }
 };
