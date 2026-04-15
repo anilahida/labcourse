@@ -14,7 +14,18 @@
                         <li><strong>Kategoria:</strong> {{ $book->category->emri }}</li>
                         <li><strong>Çmimi:</strong> <span class="text-success fw-bold">{{ $book->cmimi }} €</span></li>
                     </ul>
+                    
                     <a href="{{ route('books.index') }}" class="btn btn-outline-secondary w-100 mt-3">Kthehu te Lista</a>
+
+                    @auth
+                        <form action="{{ route('wishlist.store') }}" method="POST" class="mt-2">
+                            @csrf
+                            <input type="hidden" name="book_id" value="{{ $book->book_id }}">
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="fa fa-heart"></i> Shto në List
+                            </button>
+                        </form>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -35,6 +46,17 @@
                             </div>
                             <h6 class="mt-2 mb-1 fw-bold">{{ $review->user->name ?? 'Përdorues i paidentifikuar' }}</h6>
                             <p class="mb-0 text-secondary">{{ $review->komenti }}</p>
+                            
+                            {{-- Butonat Update/Delete për Review --}}
+                            @if(auth()->id() == $review->user_id)
+                                <div class="mt-2">
+                                    <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-link text-danger p-0" onclick="return confirm('A jeni të sigurt?')">Fshij</button>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     @empty
                         <p class="text-muted">Nuk ka ende vlerësime për këtë libër.</p>
@@ -71,8 +93,8 @@
                     </div>
                 </div>
             @else
-                <div class="alert alert-light border">
-                    Duhet të jeni të <a href="{{ route('login') }}">loguar</a> për të lënë një vlerësim.
+                <div class="alert alert-light border text-center">
+                    Duhet të jeni të <a href="{{ route('login') }}">loguar</a> për të lënë një vlerësim ose për të shtuar në Wishlist.
                 </div>
             @endauth
         </div>

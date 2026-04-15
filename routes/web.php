@@ -1,10 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ReviewController; // DUHET TA SHTOSH KËTË RRESHT
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -12,13 +15,21 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+// Resurset kryesore
 Route::resource('authors', AuthorController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('books', BookController::class);
 
-// Tani ky rresht do të funksionojë pa gabime
-Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
-Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy')->middleware('auth');
-Route::patch('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update')->middleware('auth');
+// Rrugët për vlerësimet (Reviews)
+Route::middleware(['auth'])->group(function () {
+    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+    Route::patch('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+
+    // Rrugët për listën e dëshirave (Wishlist)
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+});

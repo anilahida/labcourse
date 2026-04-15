@@ -30,6 +30,9 @@
                             <a class="nav-link" href="{{ route('books.index') }}">Librat</a>
                         </li>
                         <li class="nav-item">
+    <a class="nav-link" href="{{ route('wishlist.index') }}">Lista ime</a>
+</li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('authors.index') }}">Autorët</a>
                         </li>
                         <li class="nav-item">
