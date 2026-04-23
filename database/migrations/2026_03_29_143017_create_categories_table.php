@@ -11,20 +11,24 @@ return new class extends Migration
      */
    public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('categories', function (Blueprint $table) {
             $table->id('kategori_id'); // PK sipas detyrës
             $table->string('emri');
             $table->text('pershkrimi')->nullable();
             
             // Kjo lejon që një kategori të ketë një "prind" (p.sh. "Roman" prind i "Thriller")
-            $table->unsignedBigInteger('kategoria_prind_id')->nullable();
-            $table->foreign('kategoria_prind_id')
-                  ->references('kategori_id')
-                  ->on('categories')
-                  ->onDelete('cascade');
+    
+       $table->foreignId('kategoria_prind_id')
+      ->nullable()
+      ->constrained('categories', 'kategori_id')
+      ->onDelete('cascade');
             
             $table->timestamps();
         });
+        
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

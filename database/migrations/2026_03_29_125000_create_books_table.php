@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
 {
+    Schema::disableForeignKeyConstraints();
     Schema::create('books', function (Blueprint $table) {
-        $table->id('book_id'); // Ose thjesht $table->id(); varet si e ke lënë te Modeli
+        $table->id(); // Ose thjesht $table->id(); varet si e ke lënë te Modeli
         $table->string('titulli');
         $table->text('pershkrimi')->nullable();
         $table->string('isbn')->unique();
@@ -20,15 +21,16 @@ return new class extends Migration
         $table->integer('sasia');
         
         // Lidhjet me tabelat tjera (Foreign Keys)
-        $table->unsignedBigInteger('author_id');
-        $table->unsignedBigInteger('category_id');
+        $table->unsignedBigInteger('author_id')->index();
+        $table->unsignedBigInteger('category_id')->index();
 
         $table->timestamps();
 
         // Deklarimi i lidhjeve (Opsionale por e rekomanduar)
-        $table->foreign('author_id')->references('author_id')->on('authors')->onDelete('cascade');
-        $table->foreign('category_id')->references('kategori_id')->on('categories')->onDelete('cascade');
+      $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
+      $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
     });
+    Schema::enableForeignKeyConstraints();
 }
 
     /**

@@ -6,27 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
-{
-    Schema::create('wishlists', function (Blueprint $table) {
-        $table->id();
-        // Lidhja me përdoruesit
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        
-        // Lidhja me librat (përdorim book_id siç e kemi në tabelën books)
-        $table->unsignedBigInteger('book_id');
-        $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
-        
-        $table->timestamps();
-    });
-}
+    {
+        Schema::disableForeignKeyConstraints();
 
-    /**
-     * Reverse the migrations.
-     */
+        Schema::create('wishlists', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('book_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::enableForeignKeyConstraints();
+    }
+
     public function down(): void
     {
         Schema::dropIfExists('wishlists');

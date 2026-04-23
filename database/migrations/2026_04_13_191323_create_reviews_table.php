@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up()
 {
+    Schema::disableForeignKeyConstraints();
     Schema::create('reviews', function (Blueprint $table) {
         $table->id();
         // Lidhja me librin (referencë te book_id)
-        $table->unsignedBigInteger('book_id');
-        $table->foreign('book_id')->references('book_id')->on('books')->onDelete('cascade');
+      $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
         
         // Lidhja me përdoruesin (kush e bën vlerësimin)
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -24,6 +24,7 @@ return new class extends Migration
         $table->text('komenti')->nullable();
         $table->timestamps();
     });
+    Schema::enableForeignKeyConstraints();
 }
 
     /**
