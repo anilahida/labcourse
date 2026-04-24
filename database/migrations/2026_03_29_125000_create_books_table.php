@@ -21,14 +21,11 @@ return new class extends Migration
         $table->integer('sasia');
         
         // Lidhjet me tabelat tjera (Foreign Keys)
-        $table->unsignedBigInteger('author_id')->index();
-        $table->unsignedBigInteger('category_id')->index();
+      $table->foreignId('author_id')->constrained('authors')->onDelete('cascade');
+      $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
 
         $table->timestamps();
 
-        // Deklarimi i lidhjeve (Opsionale por e rekomanduar)
-      $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
-      $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
     });
     Schema::enableForeignKeyConstraints();
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::disableForeignKeyConstraints();
 
         Schema::create('categories', function (Blueprint $table) {
-            $table->id('kategori_id'); // PK sipas detyrës
+            $table->id(); // PK sipas detyrës
             $table->string('emri');
             $table->text('pershkrimi')->nullable();
             
@@ -22,7 +22,7 @@ return new class extends Migration
     
        $table->foreignId('kategoria_prind_id')
       ->nullable()
-      ->constrained('categories', 'kategori_id')
+      ->constrained('categories')
       ->onDelete('cascade');
             
             $table->timestamps();

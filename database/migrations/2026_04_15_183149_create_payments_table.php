@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             // Kjo lidhet me 'book_id' sepse ashtu e ke emertuar primarin te tabela books
-            $table->foreignId('book_id')->constrained('books', 'book_id')->onDelete('cascade');
+            $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->decimal('shuma', 8, 2);
             $table->string('metoda_pageses')->default('Kredit Kartel');
             $table->string('statusi')->default('e perfunduar');
