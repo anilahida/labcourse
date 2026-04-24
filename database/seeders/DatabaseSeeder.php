@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
       $this->call([
         AuthorSeeder::class,
+        ClientSeeder::class,
         // Ketu do te shtojme edhe BookSeeder me vone
       ]);
 }
