@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User; // Importojmë modelin User
+use App\Models\Client; // Importojmë modelin User
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -10,7 +10,7 @@ class ClientController extends Controller
     // 1. Shfaq te gjithe klientet
     public function index()
     {
-        return User::all();
+        return Client::all();
     }
 
     // 2. Ruaj një klient te ri
@@ -18,25 +18,22 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-        ]);
+            'email' => 'required|email|unique:clients,email',
+             ]);
 
-        $validated['password'] = bcrypt($validated['password']);
-        
-        return User::create($validated);
+        return Client::create($validated);
     }
 
     // 3. Shfaq nje klient specifik
     public function show(string $id)
     {
-        return User::findOrFail($id);
+        return Client::findOrFail($id);
     }
 
     // 4. Perditeso te dhenat e klientit
     public function update(Request $request, string $id)
     {
-        $client = User::findOrFail($id);
+        $client = Client::findOrFail($id);
         $client->update($request->all());
         return $client;
     }
@@ -44,7 +41,7 @@ class ClientController extends Controller
     // 5. Fshij klientin
     public function destroy(string $id)
     {
-        $client = User::findOrFail($id);
+        $client = Client::findOrFail($id);
         $client->delete();
         return response()->json(['message' => 'Klienti u fshi me sukses']);
     }
