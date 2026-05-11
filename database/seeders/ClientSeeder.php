@@ -12,16 +12,14 @@ class ClientSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::create([
-            'name' => 'Ema Gashi',
-            'email' => 'ema@example.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password123')
-        ]);
+        \App\Models\Client::create([
+           'name' => 'Ema Gashi',
+           'email' => 'ema@example.com',
+    ]);
 
-        \App\Models\User::create([
-            'name' => 'Agon Berisha',
-            'email' => 'agon@example.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('password123')
-        ]);
-    }
+    \App\Models\Client::create([
+        'name' => 'Agon Berisha',
+        'email' => 'agon@example.com',
+    ]);
+}
 }
