@@ -19,6 +19,7 @@ use App\Http\Controllers\CouponController;
 */
 // Rrugët për CRUD-at e rinj
 Route::apiResource('clients', ClientController::class);
+Route::apiResource('orders', App\Http\Controllers\OrderController::class);
 Route::apiResource('orders', OrderController::class);
 Route::apiResource('order-details', OrderDetailController::class);
 Route::apiResource('shipments', ShipmentController::class);

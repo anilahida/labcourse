@@ -1,12 +1,10 @@
 import './bootstrap';
 import { createApp } from 'vue';
 
-// Importojmë komponentin që sapo krijove
-import ClientsIndex from './components/ClientsIndex.vue';
+import MainLayout from './components/MainLayout.vue';
 
 const app = createApp({});
 
-// I japim një emër që do ta përdorim në HTML/Blade
-app.component('clients-index', ClientsIndex);
+app.component('main-layout', MainLayout);
 
-app.mount('#app');
+app.mount('#app')
