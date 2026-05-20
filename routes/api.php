@@ -24,6 +24,7 @@ Route::apiResource('orders', OrderController::class);
 Route::apiResource('order-details', OrderDetailController::class);
 Route::apiResource('shipments', ShipmentController::class);
 Route::apiResource('coupons', CouponController::class);
+Route::apiResource('order-details', OrderDetailController::class);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

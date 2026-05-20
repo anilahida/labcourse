@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OrderDetail; 
 use Illuminate\Http\Request;
 
 class OrderDetailController extends Controller
@@ -11,7 +12,8 @@ class OrderDetailController extends Controller
      */
     public function index()
     {
-        //
+       
+        return OrderDetail::with('order.client')->get();
     }
 
     /**
@@ -19,7 +21,16 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'order_id'   => 'required|exists:orders,id',
+            'item_name'  => 'required|string|max:255',
+            'quantity'   => 'required|integer|min:1',
+            'price'      => 'required|numeric|min:0',
+        ]);
+
+        $orderDetail = OrderDetail::create($validated);
+
+        return response()->json($orderDetail, 201);
     }
 
     /**
@@ -27,7 +38,7 @@ class OrderDetailController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return OrderDetail::with('order')->findOrFail($id);
     }
 
     /**
@@ -35,7 +46,18 @@ class OrderDetailController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $orderDetail = OrderDetail::findOrFail($id);
+
+        $validated = $request->validate([
+            'order_id'   => 'required|exists:orders,id',
+            'item_name'  => 'required|string|max:255',
+            'quantity'   => 'required|integer|min:1',
+            'price'      => 'required|numeric|min:0',
+        ]);
+
+        $orderDetail->update($validated);
+
+        return response()->json($orderDetail);
     }
 
     /**
@@ -43,6 +65,9 @@ class OrderDetailController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $orderDetail = OrderDetail::findOrFail($id);
+        $orderDetail->delete();
+
+        return response()->json(['message' => 'Detaji u fshi me sukses']);
     }
 }
