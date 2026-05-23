@@ -24,10 +24,10 @@ class Book extends Model
     ];
 
     // Lidhja: Libri i takon një Autori
-    public function author()
-    {
-        return $this->belongsTo(Author::class, 'author_id');
-    }
+public function author()
+{
+    return $this->belongsTo(Author::class, 'author_id', 'author_id');
+}
 
     // Lidhja: Libri i takon një Kategorie
     public function category()

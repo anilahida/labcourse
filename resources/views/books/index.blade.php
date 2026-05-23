@@ -4,7 +4,10 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Lista e Librave</h1>
-        <a href="{{ route('books.create') }}" class="btn btn-primary">Shto Libër të Ri</a>
+        {{-- Butoni "Shto Libër" shfaqet VETËM për Adminin --}}
+        @if(auth()->check() && auth()->user()->is_admin)
+            <a href="{{ route('books.create') }}" class="btn btn-primary">Shto Libër të Ri</a>
+        @endif
     </div>
 
     @if(session('success'))
@@ -41,16 +44,16 @@
                 @forelse($books as $book)
                 <tr>
                     <td>
-    <div class="fw-bold">{{ $book->titulli }}</div>
-    @if($book->reviews_avg_nota)
-        <span class="text-warning small">
-            {{ number_format($book->reviews_avg_nota, 1) }} ★
-            <span class="text-muted">({{ $book->reviews_count ?? $book->reviews()->count() }})</span>
-        </span>
-    @else
-        <span class="text-muted small">Pa vlerësime</span>
-    @endif
-</td>
+                        <div class="fw-bold">{{ $book->titulli }}</div>
+                        @if($book->reviews_avg_nota)
+                            <span class="text-warning small">
+                                {{ number_format($book->reviews_avg_nota, 1) }} ★
+                                <span class="text-muted">({{ $book->reviews_count ?? $book->reviews()->count() }})</span>
+                            </span>
+                        @else
+                            <span class="text-muted small">Pa vlerësime</span>
+                        @endif
+                    </td>
                     <td>{{ $book->isbn }}</td>
                     <td>{{ $book->author->emri }} {{ $book->author->mbiemri }}</td>
                     <td>{{ $book->category->emri }}</td>
@@ -61,18 +64,22 @@
                         </span>
                     </td>
                     <td class="text-center">
-    <div class="btn-group" role="group">
-        <a href="{{ route('books.show', $book->book_id) }}" class="btn btn-sm btn-outline-info">Shiko</a>
-        
-        <a href="{{ route('books.edit', $book->book_id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
-        
-        <form action="{{ route('books.destroy', $book->book_id) }}" method="POST" class="d-inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('A jeni të sigurt?')">Fshij</button>
-        </form>
-    </div>
-</td>
+                        <div class="btn-group" role="group">
+                            {{-- Butonin "Shiko" mund ta përdorë çdo vizitor apo blerës --}}
+                            <a href="{{ route('books.show', $book->book_id) }}" class="btn btn-sm btn-outline-info">Shiko</a>
+                            
+                            {{-- Butonat "Edit" dhe "Fshij" i sheh VETËM Admini --}}
+                            @if(auth()->check() && auth()->user()->is_admin)
+                                <a href="{{ route('books.edit', $book->book_id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                
+                                <form action="{{ route('books.destroy', $book->book_id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('A jeni të sigurt?')">Fshij</button>
+                                </form>
+                            @endif
+                        </div>
+                    </td>
                 </tr>
                 @empty
                 <tr>
