@@ -20,16 +20,17 @@
 import Navbar from './Navbar.vue';
 import ClientsIndex from './ClientsIndex.vue';
 import OrdersIndex from './OrderIndex.vue';
-// 2. KËTU u importua komponenti i ri i detajeve
 import OrderDetailsIndex from './OrderDetailsIndex.vue';
-
+import ShipmentsIndex from './ShipmentsIndex.vue';
+import CouponsIndex from './CouponsIndex.vue';
 export default {
     components: {
         'app-navbar': Navbar,
         'clients-index': ClientsIndex,
         'orders-index': OrdersIndex,
-        // 3. KËTU u regjistrua tag-u i ri për HTML
         'order-details-index': OrderDetailsIndex,
+        'shipments-index': ShipmentsIndex, 
+        'coupons-index': CouponsIndex
     },
     data() {
         return {

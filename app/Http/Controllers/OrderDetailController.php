@@ -13,7 +13,7 @@ class OrderDetailController extends Controller
     public function index()
     {
        
-        return OrderDetail::with('order.client')->get();
+        return OrderDetail::all();
     }
 
     /**
