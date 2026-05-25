@@ -6,5 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['client_id', 'total_amount', 'status', 'book_title'];
+    // Shto këtë pjesë nëse nuk e ke:
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    protected $fillable = ['client_id', 'book_title', 'total_amount', 'status'];
 }

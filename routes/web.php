@@ -46,13 +46,19 @@ Route::middleware(['auth'])->group(function () {
 // 3. RRUGËT VETËM PËR ADMININ
 // ==========================================
 Route::middleware(['auth', 'admin'])->group(function () {
-    // CRUD-et Menaxhuese
-    Route::resource('authors', AuthorController::class)->except(['index', 'show']);
-    Route::resource('categories', CategoryController::class)->except(['index', 'show']);
-    Route::resource('books', BookController::class)->except(['index', 'show']);
+    
+    // ... rreshtat e tjerë ...
 
-    // Rrugët për Porositë (OrderIndex)
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    // Kjo është rruga që hap faqen (View)
+    Route::get('/orders', function () {
+        return view('orders.index');
+    })->name('orders.view');
+
+    // Këto janë endpoint-et për të dhënat (API)
+    Route::get('/api/orders', [OrderController::class, 'index']);
     Route::get('/api/clients', [OrderController::class, 'getClients']);
     Route::post('/api/orders', [OrderController::class, 'store']);
+    
+    // SHTO KËTË RRESHT:
+    Route::delete('/api/orders/{id}', [OrderController::class, 'destroy']);
 });

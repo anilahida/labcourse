@@ -1,9 +1,12 @@
 import './bootstrap';
 import { createApp } from 'vue';
 
-// Kjo është rruga që i tregon JS-së ku ndodhen komponentët e tu
+// 1. Importo komponentin
 import OrderIndex from './components/OrderIndex.vue'; 
 
 const app = createApp({});
-app.component('order-index', OrderIndex);
-app.mount('#app');
+
+// 2. Regjistro komponentin (kjo e bën të disponueshëm në Blade)
+app.component('order-index', OrderIndex); 
+
+app.mount('#app'); // Sigurohu që ke <div id="app"> në layouts/app.blade.php
