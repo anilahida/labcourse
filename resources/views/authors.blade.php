@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <orders-index></orders-index>
+    <author-index></author-index>
 @endsection

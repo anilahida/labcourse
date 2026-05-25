@@ -1,46 +1,25 @@
 <template>
-    <div>
-        <app-navbar :current-page="page" @change-page="changePage"></app-navbar>
+  <div class="d-flex" style="min-height: 100vh; background-color: #F8F0E5;">
+    
+    <aside style="width: 250px; background-color: #8B0000;" class="p-4">
+      <h4 class="text-white mb-4">Libraria Ime</h4>
+      <div class="nav flex-column gap-2">
+        <button @click="$emit('change-page', 'orders')" class="btn text-white text-start w-100 border-0">Porositë</button>
+        <button @click="$emit('change-page', 'books')" class="btn text-white text-start w-100 border-0">Librat</button>
+        <button @click="$emit('change-page', 'clients')" class="btn text-white text-start w-100 border-0">Klientët</button>
+      </div>
+    </aside>
 
-        <div v-if="page === 'clients'">
-            <clients-index></clients-index>
-        </div>
-
-        <div v-if="page === 'orders'">
-            <orders-index></orders-index>
-        </div>
-
-        <div v-if="page === 'order_details'">
-            <order-details-index></order-details-index>
-        </div>
-    </div>
+    <main class="flex-grow-1 p-4">
+      <slot />
+    </main>
+  </div>
 </template>
 
 <script>
-import Navbar from './Navbar.vue';
-import ClientsIndex from './ClientsIndex.vue';
-import OrdersIndex from './OrderIndex.vue';
-import OrderDetailsIndex from './OrderDetailsIndex.vue';
-import ShipmentsIndex from './ShipmentsIndex.vue';
-import CouponsIndex from './CouponsIndex.vue';
 export default {
-    components: {
-        'app-navbar': Navbar,
-        'clients-index': ClientsIndex,
-        'orders-index': OrdersIndex,
-        'order-details-index': OrderDetailsIndex,
-        'shipments-index': ShipmentsIndex, 
-        'coupons-index': CouponsIndex
-    },
-    data() {
-        return {
-            page: 'orders' // Faqja fillestare
-        }
-    },
-    methods: {
-        changePage(newPage) {
-            this.page = newPage;
-        }
-    }
+  data() {
+    return { currentTab: 'orders' }
+  }
 }
 </script>

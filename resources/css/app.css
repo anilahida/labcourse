@@ -1,0 +1,42 @@
+:root {
+    --cherry-red: #8B0000;     /* E kuqe e thellë (Cherry) */
+    --pearl-white: #F8F0E5;    /* Sfondi i butë (Pearly) */
+    --text-color: #333;
+}
+
+body {
+    background-color: var(--pearl-white) !important;
+    color: var(--text-color);
+}
+
+/* Koka e Dashboard-it dhe Navbar */
+.navbar, .bg-cherry {
+    background-color: var(--cherry-red) !important;
+    color: white !important;
+}
+
+/* Forma dhe Tabela */
+.card {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+/* Butonat */
+.btn-success {
+    background-color: var(--cherry-red) !important;
+    border: none;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #d9534f !important;
+}
+
+/* Tabelat */
+.table thead {
+    background-color: var(--cherry-red);
+    color: white;
+}

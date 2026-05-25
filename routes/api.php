@@ -32,3 +32,6 @@ Route::apiResource('orders', OrderController::class);
 Route::apiResource('order-details', OrderDetailController::class);
 Route::apiResource('shipments', ShipmentController::class);
 Route::apiResource('coupons', CouponController::class);
+
+Route::apiResource('authors', AuthorController::class);
+Route::apiResource('categories', CategoryController::class);

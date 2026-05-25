@@ -21,20 +21,19 @@ class OrderController extends Controller
         return response()->json(Client::all());
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'client_id' => 'required',
-            'total_amount' => 'required|numeric',
-            'book_title' => 'required|string|max:255',
-        ]);
+   public function store(Request $request)
+{
+    // Validimi i të dhënave
+    $request->validate([
+        'client_id' => 'required|exists:clients,id',
+        'book_title' => 'required|string|max:255',
+        'total_amount' => 'required|numeric|min:0',
+    ]);
 
-        $validated['status'] = 'pending'; 
-
-        $order = Order::create($validated);
-        
-        return response()->json(['message' => 'Sukses!', 'order' => $order]);
-    }
+    // Nëse validimi dështon, Laravel do ta kthejë automatikisht përdoruesin mbrapa me gabime.
+    // Nëse kalon, vazhdo me ruajtjen:
+    return \App\Models\Order::create($request->all());
+}
 
     public function destroy($id)
 {

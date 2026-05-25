@@ -8,11 +8,10 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
     // 1. Shfaq listën e kategorive
-    public function index()
-    {
-        $categories = Category::with('parent')->get();
-        return view('categories.index', compact('categories'));
-    }
+    public function index() {
+    $categories = \App\Models\Category::all();
+    return view('categories.index', compact('categories'));
+}
 
     // 2. Shfaq formën për krijim
     public function create()
