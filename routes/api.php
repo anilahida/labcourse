@@ -21,20 +21,14 @@ use App\Http\Controllers\CouponController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
+// Merr të dhënat e përdoruesit të loguar (nëse i duhet Vue-së)
+Route::get('user', [AuthController::class, 'getAuthenticatedUser']);
 
 // ==========================================
-// 2. RRUGËT E MBROJTURA ME JWT (Kërkohet Token)
+// 2. RRUGËT E LIRUARA (Nuk kërkojnë më Token për test)
 // ==========================================
-Route::middleware(['auth:api'])->group(function () {
-    
-    // Merr të dhënat e përdoruesit të loguar
-    Route::get('user', [AuthController::class, 'getAuthenticatedUser']);
-    
-    // CRUD-et e shoqes të mbrojtura me JWT
-    Route::apiResource('clients', ClientController::class);
-    Route::apiResource('orders', OrderController::class);
-    Route::apiResource('order-details', OrderDetailController::class);
-    Route::apiResource('shipments', ShipmentController::class);
-    Route::apiResource('coupons', CouponController::class);
-    
-});
+Route::apiResource('clients', ClientController::class);
+Route::apiResource('orders', OrderController::class);
+Route::apiResource('order-details', OrderDetailController::class);
+Route::apiResource('shipments', ShipmentController::class);
+Route::apiResource('coupons', CouponController::class);

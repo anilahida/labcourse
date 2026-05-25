@@ -1,10 +1,9 @@
 import './bootstrap';
 import { createApp } from 'vue';
-import OrderDetailsIndex from './components/OrderDetailsIndex.vue';
-import MainLayout from './components/MainLayout.vue';
+
+// Kjo është rruga që i tregon JS-së ku ndodhen komponentët e tu
+import OrderIndex from './components/OrderIndex.vue'; 
 
 const app = createApp({});
-
-app.component('main-layout', MainLayout);
-app.component('order-details-index', OrderDetailsIndex);
-app.mount('#app')
+app.component('order-index', OrderIndex);
+app.mount('#app');

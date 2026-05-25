@@ -6,20 +6,28 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-   
-public function run(): void
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
     {
-        
         \Schema::disableForeignKeyConstraints();
 
-        
+        // 1. Ekzekutohen seeder-at e autorëve dhe klientëve të shoqes
         $this->call([
             AuthorSeeder::class,
             ClientSeeder::class,
-            
         ]);
 
-     
+        // 2. Shtohet përdoruesi Admin (Anila) automatikisht me is_admin
+        \App\Models\User::create([
+            'name' => 'anila',
+            'email' => 'anila@gmail.com',
+            'password' => bcrypt('password123'),
+            'is_admin' => 1,
+        ]);
+
+        // 3. Shtohen kuponat nga kodi i shoqes
         \DB::table('coupons')->insert([
             [
                 'code' => 'SUPER20',
@@ -37,7 +45,7 @@ public function run(): void
             ]
         ]);
 
-        
+        // 4. Shtohen dërgesat nga kodi i shoqes
         \DB::table('shipments')->insert([
             [
                 'order_id' => 1,
@@ -55,7 +63,6 @@ public function run(): void
             ]
         ]);
 
-        
         \Schema::enableForeignKeyConstraints();
     }
 }

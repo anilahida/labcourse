@@ -1,30 +1,3 @@
-<script setup>
-import { onMounted, ref } from 'vue';
-import axios from 'axios';
-
-const coupons = ref([]);
-
-const fetchCoupons = async () => {
-    try {
-        const response = await axios.get('/api/coupons');
-        coupons.value = response.data;
-    } catch (error) {
-        console.error("Gabim:", error);
-    }
-};
-
-onMounted(fetchCoupons);
-</script>
-
-<template>
-    <table>
-        <tr v-for="coupon in coupons" :key="coupon.id">
-            <td>{{ coupon.code }}</td>
-            <td>{{ coupon.type }}</td>
-            <td>{{ coupon.value }}</td>
-        </tr>
-    </table>
-</template>
 <template>
     <div class="container mt-4">
         <div class="card p-4 mb-4 shadow-sm">
@@ -102,8 +75,10 @@ export default {
     methods: {
         fetchCoupons() {
             axios.get('/api/coupons')
-                .then(response => { this.coupons = response.data; })
-                .catch(error => console.error("Gabim gjatë marrjes së kuponave:",error));
+                .then(response => { 
+                    this.coupons = response.data; 
+                })
+                .catch(error => console.error("Gabim gjatë marrjes së kuponave:", error));
         },
         createCoupon() {
             axios.post('/api/coupons', this.form)
@@ -125,10 +100,3 @@ export default {
     }
 }
 </script>
-
-<template>
-    <tr v-for="coupon in coupons" :key="coupon.id">
-        <td>{{ coupon.id }}</td>
-        <td>{{ coupon.code }}</td>
-        </tr>
-</template>
