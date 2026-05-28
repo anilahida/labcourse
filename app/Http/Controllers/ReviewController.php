@@ -6,8 +6,16 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
+
 class ReviewController extends Controller
 {
+    public function index()
+    {
+        $reviews = Review::where('user_id', Auth::id())->with('book')->latest()->get();
+        return view('client.reviews', compact('reviews'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([

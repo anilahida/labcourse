@@ -6,12 +6,10 @@ use Illuminate\Http\Request;
 
 class CouponController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $coupons = \App\Models\Coupon::all();
+        return view('client.coupons', compact('coupons'));
     }
 
     /**

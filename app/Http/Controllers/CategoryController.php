@@ -36,5 +36,9 @@ class CategoryController extends Controller
     return redirect()->route('categories.index')->with('success', 'Kategoria u krijua me sukses!');
 }
 
-    // Shtojmë edhe edit, update, destroy më vonë...
+    public function destroy($id)
+    {
+        Category::destroy($id);
+        return redirect()->route('categories.index')->with('success', 'Kategoria u fshi me sukses!');
+    }
 }

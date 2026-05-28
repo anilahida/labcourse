@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $fillable = ['user_id', 'book_id', 'shuma', 'metoda_pageses', 'statusi'];
     use HasFactory;
+
+    protected $fillable = ['user_id', 'book_id', 'shuma', 'metoda_pageses', 'statusi'];
+
+    public function book()
+    {
+        return $this->belongsTo(Book::class, 'book_id');
+    }
 }

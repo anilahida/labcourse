@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
+    public function index()
+    {
+        $payments = Payment::where('user_id', Auth::id())->with('book')->latest()->get();
+        return view('client.payments', compact('payments'));
+    }
+
     // 1. Shfaqja e formes se checkout
     public function checkout($book_id)
     {

@@ -6,12 +6,10 @@ use Illuminate\Http\Request;
 
 class ShipmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $shipments = \App\Models\Shipment::all();
+        return view('client.shipments', compact('shipments'));
     }
 
     /**

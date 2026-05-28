@@ -9,14 +9,10 @@ class Author extends Model
 {
     use HasFactory;
 
-    // 1. I tregojmë Laravel-it që emri i kolonës kryesore nuk është 'id', por 'author_id'
-    protected $primaryKey = 'author_id'; 
+    protected $fillable = ['emri', 'mbiemri', 'biografia', 'foto_autori'];
 
-    protected $fillable = ['emri', 'biografia'];
-
-    // 2. Lidhja: Një autor ka shumë libra (hasMany)
     public function books()
     {
-        return $this->hasMany(Book::class, 'author_id', 'author_id');
+        return $this->hasMany(Book::class, 'author_id');
     }
 }
