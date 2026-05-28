@@ -122,6 +122,24 @@
             display: flex; align-items: center; justify-content: space-between;
         }
         .see-all { color: var(--cherry); font-size: 0.78rem; text-decoration: none; font-weight: 700; }
+
+        /* ── Topbar dropdowns ── */
+        .topbar-drop {
+            position: absolute; top: calc(100% + 8px); right: 0;
+            background: white; border-radius: 12px;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+            border: 1px solid #f0ebe8;
+            z-index: 2000; min-width: 220px;
+            overflow: hidden;
+        }
+        .topbar-drop-item {
+            display: flex; align-items: center; gap: 8px;
+            padding: .5rem 1rem; font-size: .82rem; font-weight: 600;
+            color: #444; text-decoration: none;
+            transition: background .15s;
+        }
+        .topbar-drop-item:hover { background: var(--cherry-light); color: var(--cherry); }
+        .topbar-drop-item i { width: 16px; text-align: center; }
     </style>
     @yield('styles')
 </head>
@@ -143,7 +161,11 @@
         <nav>
             <a href="{{ route('home') }}"
                class="cli-nav-link {{ request()->is('home') ? 'active' : '' }}">
-                <i class="bi bi-book-half"></i> Biblioteka Ime
+                <i class="bi bi-grid-1x2-fill"></i> Biblioteka Ime
+            </a>
+            <a href="{{ route('books.browse') }}"
+               class="cli-nav-link {{ request()->is('browse*') ? 'active' : '' }}">
+                <i class="bi bi-book-half"></i> Shfleto Librat
             </a>
             <a href="{{ route('wishlist.index') }}"
                class="cli-nav-link {{ request()->is('wishlist*') ? 'active' : '' }}">
@@ -190,13 +212,47 @@
                 <h5 class="fw-bold mb-0">@yield('page-title', 'Biblioteka Ime')</h5>
                 <p class="text-muted mb-0" style="font-size:0.8rem;">@yield('page-sub', '')</p>
             </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm border-0" style="background:#fff;border-radius:10px;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;">
-                    <i class="bi bi-bell text-muted"></i>
-                </button>
-                <button class="btn btn-sm border-0" style="background:#fff;border-radius:10px;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;">
-                    <i class="bi bi-gear text-muted"></i>
-                </button>
+            <div class="d-flex gap-2" style="position:relative;">
+
+                {{-- Bell --}}
+                <div style="position:relative;">
+                    <button id="btn-bell" onclick="toggleDrop('drop-bell')"
+                        style="background:#fff;border:none;border-radius:10px;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                        <i class="bi bi-bell" style="color:#888;font-size:1rem;"></i>
+                    </button>
+                    <div id="drop-bell" class="topbar-drop" style="display:none;right:0;">
+                        <div style="padding:.6rem 1rem .4rem;font-weight:800;font-size:.82rem;border-bottom:1px solid #f5f0ec;">Njoftimet</div>
+                        <div style="padding:1.5rem 1rem;text-align:center;color:#bbb;">
+                            <i class="bi bi-bell-slash" style="font-size:1.8rem;display:block;margin-bottom:.5rem;"></i>
+                            <span style="font-size:.78rem;">Nuk ka njoftime të reja</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Gear / Settings --}}
+                <div style="position:relative;">
+                    <button id="btn-gear" onclick="toggleDrop('drop-gear')"
+                        style="background:#fff;border:none;border-radius:10px;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                        <i class="bi bi-gear" style="color:#888;font-size:1rem;"></i>
+                    </button>
+                    <div id="drop-gear" class="topbar-drop" style="display:none;right:0;min-width:180px;">
+                        <div style="padding:.6rem 1rem .4rem;font-weight:800;font-size:.82rem;border-bottom:1px solid #f5f0ec;">
+                            {{ Auth::user()->name }}
+                        </div>
+                        <a href="{{ route('home') }}" class="topbar-drop-item"><i class="bi bi-person-fill"></i> Profili im</a>
+                        <a href="{{ route('payments.index') }}" class="topbar-drop-item"><i class="bi bi-credit-card-2-front-fill"></i> Pagesat</a>
+                        <a href="{{ route('addresses.index') }}" class="topbar-drop-item"><i class="bi bi-geo-alt-fill"></i> Adresat</a>
+                        <div style="border-top:1px solid #f5f0ec;margin-top:4px;padding-top:4px;">
+                            <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                @csrf
+                                <button type="submit" class="topbar-drop-item" style="width:100%;text-align:left;background:none;border:none;color:var(--cherry);cursor:pointer;font-family:'Nunito',sans-serif;">
+                                    <i class="bi bi-box-arrow-right"></i> Dil
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <main class="cli-content">
@@ -204,5 +260,25 @@
         </main>
     </div>
 </div>
+
+<script>
+function toggleDrop(id) {
+    const all = document.querySelectorAll('.topbar-drop');
+    all.forEach(d => { if (d.id !== id) d.style.display = 'none'; });
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#btn-bell') && !e.target.closest('#drop-bell')) {
+        const d = document.getElementById('drop-bell');
+        if (d) d.style.display = 'none';
+    }
+    if (!e.target.closest('#btn-gear') && !e.target.closest('#drop-gear')) {
+        const d = document.getElementById('drop-gear');
+        if (d) d.style.display = 'none';
+    }
+});
+</script>
+@yield('scripts')
 </body>
 </html>

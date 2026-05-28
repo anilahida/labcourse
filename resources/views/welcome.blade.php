@@ -34,12 +34,26 @@
         }
         .brand:hover { color: var(--cherry-d); }
         .nav-links { display: flex; align-items: center; gap: 4px; }
-        .nav-links a { color: #555; font-weight: 600; font-size: 0.88rem; padding: 6px 14px; border-radius: 8px; transition: color 0.2s, background 0.2s; }
-        .nav-links a:hover { color: var(--cherry); background: #fff0f2; }
+        .nav-links a {
+            color: #555; font-weight: 600; font-size: 0.88rem;
+            padding: 6px 14px; border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--cherry); background: #fff0f2; }
         .nav-actions { display: flex; align-items: center; gap: 8px; }
-        .btn-outline { border: 1.5px solid #ddd; background: none; color: #555; border-radius: 8px; padding: 7px 18px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .btn-outline {
+            border: 1.5px solid #ddd; background: none; color: #555;
+            border-radius: 8px; padding: 7px 18px; font-weight: 700;
+            font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+            text-decoration: none; display: inline-block;
+        }
         .btn-outline:hover { border-color: var(--cherry); color: var(--cherry); }
-        .btn-solid { background: var(--cherry); color: #fff !important; border: none; border-radius: 8px; padding: 8px 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-solid {
+            background: var(--cherry); color: #fff !important; border: none;
+            border-radius: 8px; padding: 8px 20px; font-weight: 700;
+            font-size: 0.85rem; cursor: pointer; transition: background 0.2s;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
         .btn-solid:hover { background: var(--cherry-d); }
 
         /* ── HERO ── */
@@ -57,9 +71,19 @@
         .hero-title span { color: #f87096; }
         .hero-desc { color: rgba(255,255,255,0.65); font-size: 1rem; line-height: 1.75; margin-bottom: 32px; }
         .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-        .btn-hero-main { background: #fff; color: var(--cherry) !important; border: none; border-radius: 10px; padding: 12px 28px; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-hero-main {
+            background: #fff; color: var(--cherry) !important; border: none;
+            border-radius: 10px; padding: 12px 28px; font-weight: 800;
+            font-size: 0.95rem; cursor: pointer; transition: transform 0.2s;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
         .btn-hero-main:hover { transform: translateY(-2px); }
-        .btn-hero-sec { background: transparent; color: rgba(255,255,255,0.85) !important; border: 1.5px solid rgba(255,255,255,0.4); border-radius: 10px; padding: 12px 28px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
+        .btn-hero-sec {
+            background: transparent; color: rgba(255,255,255,0.85) !important;
+            border: 1.5px solid rgba(255,255,255,0.4); border-radius: 10px;
+            padding: 12px 28px; font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; transition: all 0.2s;
+        }
         .btn-hero-sec:hover { border-color: #fff; color: #fff !important; }
 
         /* Book spine cards */
@@ -83,17 +107,10 @@
         .s4 { width: 116px; height: 175px; background: linear-gradient(160deg,#6d28d9,#a78bfa); }
 
         /* ── STATS ── */
-        .stats-wrap {
-            background: #fff;
-            border-bottom: 1px solid #f0ebe8;
-            padding: 40px 0;
-        }
+        .stats-wrap { background: #fff; border-bottom: 1px solid #f0ebe8; padding: 40px 0; }
         .stats-grid {
             max-width: 1200px; margin: 0 auto; padding: 0 24px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-            text-align: center;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; text-align: center;
         }
         .stats-grid > div { border-right: 1px solid #f0ebe8; padding: 0 20px; }
         .stats-grid > div:last-child { border-right: none; }
@@ -114,17 +131,13 @@
 
         .books-grid {
             max-width: 1200px; margin: 0 auto; padding: 0 24px;
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 16px;
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px;
         }
         .bc {
-            background: #fff;
-            border-radius: 14px;
-            overflow: hidden;
+            background: #fff; border-radius: 14px; overflow: hidden;
             box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-            transition: transform 0.25s, box-shadow 0.25s;
-            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s; cursor: pointer;
+            display: flex; flex-direction: column;
         }
         .bc:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.13); }
         .bc-cover {
@@ -134,33 +147,41 @@
         }
         .bc-cover i { font-size: 2.2rem; margin-bottom: 6px; display: block; opacity: 0.95; }
         .bc-cover-t { font-size: 0.65rem; font-weight: 700; line-height: 1.4; }
-        .bc-body { padding: 12px; }
+        .bc-body { padding: 12px; flex: 1; display: flex; flex-direction: column; }
         .bc-title { font-weight: 700; font-size: 0.78rem; color: #1a0a0f; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .bc-auth { font-size: 0.68rem; color: #aaa; margin-bottom: 6px; }
         .bc-foot { display: flex; justify-content: space-between; align-items: center; }
         .bc-stars { color: #f59e0b; font-size: 0.7rem; }
         .bc-price { color: var(--cherry); font-weight: 800; font-size: 0.85rem; }
-        .bc-btn { width: 100%; margin-top: 8px; background: #fff0f2; color: var(--cherry); border: none; border-radius: 7px; padding: 6px 0; font-size: 0.7rem; font-weight: 700; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+        .bc-actions { display: flex; gap: 6px; margin-top: 8px; }
+        .bc-btn {
+            flex: 1; background: #fff0f2; color: var(--cherry); border: none;
+            border-radius: 7px; padding: 7px 0; font-size: 0.72rem; font-weight: 700;
+            cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s;
+            text-align: center; text-decoration: none; display: flex;
+            align-items: center; justify-content: center; gap: 4px;
+        }
         .bc-btn:hover { background: var(--cherry); color: #fff; }
+        .bc-btn-wish {
+            width: 32px; flex-shrink: 0; background: #f5f0ec; color: #aaa;
+            border: none; border-radius: 7px; font-size: 0.8rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; text-decoration: none;
+        }
+        .bc-btn-wish:hover { background: #fff0f2; color: var(--cherry); }
 
         /* ── CATEGORIES ── */
         .cats-grid {
             max-width: 1200px; margin: 0 auto; padding: 0 24px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
         }
         .cat {
-            background: var(--pearl);
-            border: 2px solid transparent;
-            border-radius: 14px;
-            padding: 28px 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s;
+            background: var(--pearl); border: 2px solid transparent;
+            border-radius: 14px; padding: 28px 16px; text-align: center;
+            cursor: pointer; transition: all 0.25s;
             display: flex; flex-direction: column; align-items: center;
-            aspect-ratio: 1 / 0.8;
-            justify-content: center;
+            aspect-ratio: 1 / 0.8; justify-content: center;
+            text-decoration: none; color: inherit;
         }
         .cat:hover { border-color: var(--cherry); background: #fff; transform: translateY(-4px); box-shadow: 0 10px 24px rgba(196,30,58,0.12); }
         .cat i { font-size: 1.8rem; color: var(--cherry); margin-bottom: 10px; }
@@ -209,7 +230,11 @@
             <a href="{{ url('/') }}">Kryefaqja</a>
             <a href="#books">Librat</a>
             <a href="#categories">Kategoritë</a>
-            <a href="#">Wishlist</a>
+            @auth
+                <a href="{{ route('wishlist.index') }}">Wishlist</a>
+            @else
+                <a href="{{ route('login') }}">Wishlist</a>
+            @endauth
         </div>
 
         <div class="nav-actions">
@@ -236,7 +261,8 @@
             <p class="hero-desc">Zbulo botën e librave — nga letërsia klasike deri tek teknologjia moderne. Çdo faqe sjell një aventurë të re.</p>
             <div class="hero-btns">
                 @auth
-                    <a href="{{ url('/home') }}" class="btn-hero-main">Hyr te Paneli <i class="bi bi-arrow-right"></i></a>
+                    <a href="{{ route('books.browse') }}" class="btn-hero-main">Shfleto Librat <i class="bi bi-arrow-right"></i></a>
+                    <a href="{{ url('/home') }}" class="btn-hero-sec">Paneli im</a>
                 @else
                     <a href="{{ route('register') }}" class="btn-hero-main">Fillo Tani <i class="bi bi-arrow-right"></i></a>
                     <a href="{{ route('login') }}" class="btn-hero-sec">Hyr</a>
@@ -255,51 +281,104 @@
 {{-- ── STATS ── --}}
 <div class="stats-wrap">
     <div class="stats-grid">
-        <div><div class="sn">10,000+</div><div class="sl">Tituj Librash</div></div>
-        <div><div class="sn">5,200+</div><div class="sl">Anëtarë Aktivë</div></div>
-        <div><div class="sn">98%</div><div class="sl">Klientë të Kënaqur</div></div>
+        <div><div class="sn">{{ \App\Models\Book::count() }}+</div><div class="sl">Tituj Librash</div></div>
+        <div><div class="sn">{{ \App\Models\User::count() }}+</div><div class="sl">Anëtarë Aktivë</div></div>
+        <div><div class="sn">{{ \App\Models\Review::count() }}+</div><div class="sl">Vlerësime</div></div>
         <div><div class="sn">24/7</div><div class="sl">Akses Online</div></div>
     </div>
 </div>
 
 {{-- ── BOOKS ── --}}
+@php
+$coverColors = [
+    ['linear-gradient(160deg,#e63946,#c1121f)', 'bi-journal-richtext'],
+    ['linear-gradient(160deg,#023e8a,#0096c7)', 'bi-cpu-fill'],
+    ['linear-gradient(160deg,#1b6b3a,#52b788)', 'bi-globe2'],
+    ['linear-gradient(160deg,#6d28d9,#a78bfa)', 'bi-lightbulb-fill'],
+    ['linear-gradient(160deg,#b45309,#f59e0b)', 'bi-star-fill'],
+    ['linear-gradient(160deg,#c1121f,#e63946)', 'bi-heart-fill'],
+];
+@endphp
+
 <section class="section" id="books">
     <div class="sec-head">
         <div>
             <span class="sec-tag">Koleksioni</span>
             <h2 class="sec-h">Rekomanduar për Ju</h2>
         </div>
-        <a href="#" class="see-all">Shiko të gjitha <i class="bi bi-arrow-right"></i></a>
+        @auth
+            <a href="{{ route('books.browse') }}" class="see-all">Shiko të gjitha <i class="bi bi-arrow-right"></i></a>
+        @else
+            <a href="{{ route('login') }}" class="see-all">Shiko të gjitha <i class="bi bi-arrow-right"></i></a>
+        @endauth
     </div>
     <div class="books-grid">
-        @foreach([
-            ['linear-gradient(160deg,#e63946,#c1121f)','bi-journal-richtext','Inteligjenca Emocionale','D. Goleman','4.9','18'],
-            ['linear-gradient(160deg,#023e8a,#0096c7)','bi-cpu-fill','Atomic Habits','James Clear','5.0','22'],
-            ['linear-gradient(160deg,#1b6b3a,#52b788)','bi-globe2','Sapiens','Y. N. Harari','4.8','20'],
-            ['linear-gradient(160deg,#6d28d9,#a78bfa)','bi-lightbulb-fill','Psikologjia e Parasë','M. Housel','4.9','16'],
-            ['linear-gradient(160deg,#b45309,#f59e0b)','bi-star-fill','Gjenerali i Ushtrisë','I. Kadare','4.7','14'],
-            ['linear-gradient(160deg,#c1121f,#e63946)','bi-heart-fill','The Alchemist','P. Coelho','4.8','12'],
-        ] as $b)
+        @forelse($featuredBooks as $i => $book)
+        @php $clr = $coverColors[$i % count($coverColors)]; @endphp
         <div class="bc">
-            <div class="bc-cover" style="background:{{ $b[0] }};">
-                <i class="bi {{ $b[1] }}"></i>
-                <div class="bc-cover-t">{{ $b[2] }}</div>
-            </div>
-            <div class="bc-body">
-                <div class="bc-title">{{ $b[2] }}</div>
-                <div class="bc-auth">{{ $b[3] }}</div>
-                <div class="bc-foot">
-                    <span class="bc-stars">★ {{ $b[4] }}</span>
-                    <span class="bc-price">€{{ $b[5] }}</span>
+            <a href="{{ route('books.show', $book->id) }}" style="text-decoration:none;">
+                <div class="bc-cover" style="background:{{ $clr[0] }};">
+                    <i class="bi {{ $clr[1] }}"></i>
+                    <div class="bc-cover-t">{{ $book->titulli }}</div>
                 </div>
-                <button class="bc-btn">Shto në shportë</button>
+            </a>
+            <div class="bc-body">
+                <div class="bc-title">{{ $book->titulli }}</div>
+                <div class="bc-auth">{{ $book->author->emri ?? '' }} {{ $book->author->mbiemri ?? '' }}</div>
+                <div class="bc-foot">
+                    @if($book->reviews_avg_nota)
+                        <span class="bc-stars">★ {{ number_format($book->reviews_avg_nota,1) }}</span>
+                    @else
+                        <span class="bc-stars" style="color:#ccc;">★ —</span>
+                    @endif
+                    <span class="bc-price">€{{ number_format($book->cmimi,0) }}</span>
+                </div>
+                <div class="bc-actions">
+                    <a href="{{ route('books.show', $book->id) }}" class="bc-btn">
+                        <i class="bi bi-bag-fill"></i> Shto në shportë
+                    </a>
+                    @auth
+                    <form action="{{ route('wishlist.store') }}" method="POST" style="display:contents;">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}">
+                        <button type="submit" class="bc-btn-wish" title="Shto në wishlist">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </form>
+                    @else
+                    <a href="{{ route('login') }}" class="bc-btn-wish" title="Hyr për wishlist">
+                        <i class="bi bi-heart"></i>
+                    </a>
+                    @endauth
+                </div>
             </div>
         </div>
-        @endforeach
+        @empty
+        <div style="grid-column:1/-1;text-align:center;padding:3rem;color:#aaa;">
+            <i class="bi bi-inbox" style="font-size:2rem;display:block;margin-bottom:.5rem;"></i>
+            Nuk ka libra në bibliotekë aktualisht.
+        </div>
+        @endforelse
     </div>
 </section>
 
 {{-- ── CATEGORIES ── --}}
+@php
+$catIcons = [
+    'Letërsi'    => 'bi-journal-richtext',
+    'Histori'    => 'bi-globe2',
+    'Shkencë'    => 'bi-flask',
+    'Teknologji' => 'bi-cpu-fill',
+    'Arte'       => 'bi-palette-fill',
+    'Filozofi'   => 'bi-lightbulb-fill',
+    'Psikologji' => 'bi-heart-pulse-fill',
+    'Poezi'      => 'bi-music-note-beamed',
+    'Biznes'     => 'bi-briefcase-fill',
+    'Sport'      => 'bi-trophy-fill',
+];
+$defaultIcon = 'bi-book-half';
+@endphp
+
 <section class="section-white" id="categories">
     <div class="sec-head">
         <div>
@@ -308,32 +387,35 @@
         </div>
     </div>
     <div class="cats-grid">
-        @foreach([
-            ['bi-journal-richtext','Letërsi','1,240 libra'],
-            ['bi-globe2','Histori','890 libra'],
-            ['bi-flask','Shkencë','650 libra'],
-            ['bi-cpu-fill','Teknologji','480 libra'],
-            ['bi-palette-fill','Arte','320 libra'],
-            ['bi-lightbulb-fill','Filozofi','410 libra'],
-            ['bi-heart-pulse-fill','Psikologji','560 libra'],
-            ['bi-music-note-beamed','Poezi','280 libra'],
-        ] as $c)
-        <div class="cat">
-            <i class="bi {{ $c[0] }}"></i>
-            <div class="cat-name">{{ $c[1] }}</div>
-            <div class="cat-n">{{ $c[2] }}</div>
+        @forelse($categories as $cat)
+        @php
+            $icon = $catIcons[$cat->emri] ?? $defaultIcon;
+            $catUrl = auth()->check() ? route('books.browse') : route('login');
+        @endphp
+        <a href="{{ $catUrl }}" class="cat">
+            <i class="bi {{ $icon }}"></i>
+            <div class="cat-name">{{ $cat->emri }}</div>
+            <div class="cat-n">{{ $cat->books_count }} libra</div>
+        </a>
+        @empty
+        <div style="grid-column:1/-1;text-align:center;padding:2rem;color:#aaa;">
+            Nuk ka kategori aktualisht.
         </div>
-        @endforeach
+        @endforelse
     </div>
 </section>
 
 {{-- ── CTA ── --}}
 <div class="cta">
     <h2>Gati për të Eksploruar?</h2>
-    <p>Bashkohu me mijëra lexues dhe zbulo botën e librave falas.</p>
+    <p>Bashkohu me mijëra lexues dhe zbulo botën e librave.</p>
     @guest
     <a href="{{ route('register') }}" class="btn-hero-main" style="display:inline-flex;">
         Regjistrohu Falas <i class="bi bi-arrow-right"></i>
+    </a>
+    @else
+    <a href="{{ route('books.browse') }}" class="btn-hero-main" style="display:inline-flex;">
+        Shfleto Librat <i class="bi bi-arrow-right"></i>
     </a>
     @endguest
 </div>

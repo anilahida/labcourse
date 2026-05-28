@@ -4,16 +4,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{AuthorController, BookController, CategoryController, OrderController,
     WishlistController, ReviewController, PaymentController, ShipmentController, CouponController, HomeController};
 
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () {
+    $featuredBooks = \App\Models\Book::with('author')->withAvg('reviews','nota')->latest()->take(6)->get();
+    $categories    = \App\Models\Category::withCount('books')->orderBy('emri')->get();
+    return view('welcome', compact('featuredBooks','categories'));
+});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Rrugët e Librave (publike + auth)
+// Rrugët e Librave për KLIENTË (shfletim + detaje)
 Route::middleware('auth')->group(function () {
-    Route::resource('books', BookController::class);
+    Route::get('/browse',      [BookController::class, 'browse'])->name('books.browse');
+    Route::get('/books/{id}',  [BookController::class, 'show'])->name('books.show');
     Route::post('/payments/checkout/{book_id}', [PaymentController::class, 'process'])->name('payments.process');
-    Route::get('/payments/checkout/{book_id}', [PaymentController::class, 'checkout'])->name('payments.checkout');
+    Route::get('/payments/checkout/{book_id}',  [PaymentController::class, 'checkout'])->name('payments.checkout');
 });
 
 // Rrugët e Klientit
@@ -35,14 +40,44 @@ Route::middleware('auth')->group(function () {
 
 // Rrugët e Adminit
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/orders', function () { return view('orders.index'); });
+    Route::get('/orders', [OrderController::class, 'webIndex'])->name('orders.index');
+    Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::resource('books',      BookController::class)->except(['show']);
     Route::resource('authors',    AuthorController::class);
     Route::resource('categories', CategoryController::class);
 
+    // Global search
+    Route::get('/admin/search', function (\Illuminate\Http\Request $request) {
+        $q = trim($request->get('q', ''));
+        if (mb_strlen($q) < 2) return response()->json([]);
+        $results = [];
+        \App\Models\Book::where('titulli','like',"%$q%")->limit(5)->each(function($b) use (&$results) {
+            $results[] = ['type'=>'Libër','icon'=>'bi-book-fill','name'=>$b->titulli,'url'=>route('books.edit',$b->id)];
+        });
+        \App\Models\Author::where('emri','like',"%$q%")->orWhere('mbiemri','like',"%$q%")->limit(5)->each(function($a) use (&$results) {
+            $results[] = ['type'=>'Autor','icon'=>'bi-person-fill','name'=>$a->emri.' '.$a->mbiemri,'url'=>url('authors/'.$a->id.'/edit')];
+        });
+        \App\Models\Category::where('emri','like',"%$q%")->limit(5)->each(function($c) use (&$results) {
+            $results[] = ['type'=>'Kategori','icon'=>'bi-grid-fill','name'=>$c->emri,'url'=>route('categories.edit',$c->id)];
+        });
+        return response()->json($results);
+    })->name('admin.search');
+
     // Admin panelet
-    Route::get('/admin/coupons',   function () {
-        return view('admin.coupons', ['coupons' => \App\Models\Coupon::all()]);
+    Route::get('/admin/coupons', function () {
+        return view('admin.coupons', ['coupons' => \App\Models\Coupon::latest()->get()]);
     })->name('admin.coupons');
+    Route::post('/admin/coupons', function (\Illuminate\Http\Request $request) {
+        $request->validate(['code'=>'required|max:30|unique:coupons,code','type'=>'required|in:percent,fixed','value'=>'required|numeric|min:0']);
+        \App\Models\Coupon::create($request->only('code','type','value'));
+        return back()->with('success','Kuponi u shtua me sukses!');
+    })->name('admin.coupons.store');
+    Route::put('/admin/coupons/{id}', function (\Illuminate\Http\Request $request, $id) {
+        $coupon = \App\Models\Coupon::findOrFail($id);
+        $request->validate(['code'=>'required|max:30|unique:coupons,code,'.$id,'type'=>'required|in:percent,fixed','value'=>'required|numeric|min:0']);
+        $coupon->update($request->only('code','type','value'));
+        return back()->with('success','Kuponi u përditësua!');
+    })->name('admin.coupons.update');
 
     Route::get('/admin/payments',  function () {
         return view('admin.payments', ['payments' => \App\Models\Payment::with('book')->latest()->get()]);

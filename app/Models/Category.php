@@ -17,4 +17,9 @@ class Category extends Model
     {
         return $this->belongsTo(Category::class, 'kategoria_prind_id');
     }
+
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'category_id');
+    }
 }

@@ -19,7 +19,7 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'book_id' => 'required|exists:books,book_id',
+            'book_id' => 'required|exists:books,id',
             'nota' => 'required|integer|min:1|max:5',
             'komenti' => 'nullable|string|max:500',
         ]);
@@ -53,8 +53,7 @@ class ReviewController extends Controller
 
     public function destroy(Review $review)
     {
-        // Vetëm autori ose admini mund ta fshijë (për momentin po e lëmë vetëm autorin)
-        if (Auth::id() === $review->user_id) {
+        if (Auth::id() === $review->user_id || Auth::user()->is_admin) {
             $review->delete();
             return back()->with('success', 'Vlerësimi u fshi me sukses.');
         }

@@ -235,7 +235,7 @@
         </tbody>
     </table>
     <div style="text-align:center;padding:0.85rem;">
-        <a href="{{ route('admin.payments') }}" style="color:var(--cherry);font-size:0.82rem;font-weight:700;text-decoration:none;">
+        <a href="{{ route('orders.index') }}" style="color:var(--cherry);font-size:0.82rem;font-weight:700;text-decoration:none;">
             Shiko të gjitha porositë <i class="bi bi-arrow-right"></i>
         </a>
     </div>

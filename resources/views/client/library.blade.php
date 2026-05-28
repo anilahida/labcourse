@@ -96,7 +96,7 @@
 {{-- ── My Books ── --}}
 <div class="sec-title">
     Librat e Mi
-    <a href="#" class="see-all">Shiko të gjitha ›</a>
+    <a href="{{ route('books.browse') }}" class="see-all">Shiko të gjitha ›</a>
 </div>
 
 <div class="books-grid">

@@ -8,13 +8,19 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    // Kjo metodë mungonte dhe shkaktonte gabimin
+    // Blade view për admin panel
+    public function webIndex()
+    {
+        $orders = Order::with('client')->orderBy('created_at', 'desc')->get();
+        return view('orders.index', compact('orders'));
+    }
+
+    // JSON për API
     public function index()
-{
-    // E.g. merr porositë dhe i lidh me klientin
-    $orders = \App\Models\Order::with('client')->orderBy('created_at', 'desc')->get();
-    return response()->json($orders);
-}
+    {
+        $orders = Order::with('client')->orderBy('created_at', 'desc')->get();
+        return response()->json($orders);
+    }
 
     public function getClients()
     {
@@ -36,9 +42,13 @@ class OrderController extends Controller
 }
 
     public function destroy($id)
-{
-    $order = \App\Models\Order::findOrFail($id);
-    $order->delete();
-    return response()->json(['message' => 'Porosia u fshi me sukses']);
-}
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'Porosia u fshi me sukses']);
+        }
+        return redirect()->route('orders.index')->with('success', 'Porosia u fshi me sukses!');
+    }
 }

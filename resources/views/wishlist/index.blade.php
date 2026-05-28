@@ -84,7 +84,7 @@
     <div class="empty-state">
         <i class="bi bi-heart" style="font-size:2.5rem;color:#e0d0d4;"></i>
         <p style="color:#aaa;margin-top:0.75rem;font-size:0.9rem;">Lista jote e dëshirave është bosh.</p>
-        <a href="{{ route('books.index') }}" style="color:var(--cherry);font-weight:700;font-size:0.85rem;text-decoration:none;">Shfleto librat →</a>
+        <a href="{{ route('books.browse') }}" style="color:var(--cherry);font-weight:700;font-size:0.85rem;text-decoration:none;">Shfleto librat →</a>
     </div>
     @endforelse
 </div>

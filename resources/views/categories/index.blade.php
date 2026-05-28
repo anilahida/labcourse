@@ -18,6 +18,7 @@ table.at tbody tr:hover td{background:#fdfbfb;}
 .badge-parent{background:#eff6ff;color:#1d4ed8;font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:20px;}
 .badge-child{background:#f5f0ec;color:#888;font-size:.68rem;font-weight:700;padding:2px 9px;border-radius:20px;}
 .act-btns{display:flex;gap:6px;}
+.btn-edit{background:#fef3c7;color:#b45309;border:none;border-radius:8px;padding:.28rem .65rem;font-size:.75rem;cursor:pointer;text-decoration:none;font-weight:600;}
 .btn-del{background:#fff0f2;color:var(--cherry);border:none;border-radius:8px;padding:.28rem .65rem;font-size:.75rem;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;}
 </style>
 @endsection
@@ -59,6 +60,7 @@ table.at tbody tr:hover td{background:#fdfbfb;}
                 </td>
                 <td>
                     <div class="act-btns">
+                        <a href="{{ route('categories.edit', $cat->id) }}" class="btn-edit"><i class="bi bi-pencil"></i> Edito</a>
                         <form action="{{ route('categories.destroy', $cat->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')
                             <button class="btn-del" onclick="return confirm('Fshi kategorinë?')"><i class="bi bi-trash3"></i></button>

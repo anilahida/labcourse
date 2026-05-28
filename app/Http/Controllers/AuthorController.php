@@ -10,10 +10,10 @@ class AuthorController extends Controller
     /**
      * 1. Shfaqja e listës së autorëve (Read)
      */
-   public function index() {
-    $authors = \App\Models\Author::all(); // Merr të gjithë autorët
-    return view('authors.index', compact('authors')); // Dërgoi te view
-}
+    public function index() {
+        $authors = \App\Models\Author::orderBy('mbiemri')->orderBy('emri')->get();
+        return view('authors.index', compact('authors'));
+    }
 
     /**
      * 2. Hapja e formës për krijim (Create)

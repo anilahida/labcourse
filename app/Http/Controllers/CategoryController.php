@@ -27,7 +27,7 @@ class CategoryController extends Controller
     $validatedData = $request->validate([
         'emri' => 'required|max:255',
         'pershkrimi' => 'nullable',
-        'kategoria_prind_id' => 'nullable|exists:categories,kategori_id',
+        'kategoria_prind_id' => 'nullable|exists:categories,id',
     ]);
 
     // 2. Ruajtja vetëm e të dhënave të validuara (kjo e largon _token automatikisht)
@@ -36,6 +36,33 @@ class CategoryController extends Controller
     return redirect()->route('categories.index')->with('success', 'Kategoria u krijua me sukses!');
 }
 
+    // 4. Shfaq formën për editim
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+        $parentCategories = Category::whereNull('kategoria_prind_id')
+                                    ->where('id', '!=', $id)
+                                    ->get();
+        return view('categories.edit', compact('category', 'parentCategories'));
+    }
+
+    // 5. Ruaj ndryshimet
+    public function update(Request $request, $id)
+    {
+        $category = Category::findOrFail($id);
+
+        $validatedData = $request->validate([
+            'emri'               => 'required|max:255',
+            'pershkrimi'         => 'nullable',
+            'kategoria_prind_id' => 'nullable|exists:categories,id',
+        ]);
+
+        $category->update($validatedData);
+
+        return redirect()->route('categories.index')->with('success', 'Kategoria u përditësua me sukses!');
+    }
+
+    // 6. Fshij kategorinë
     public function destroy($id)
     {
         Category::destroy($id);

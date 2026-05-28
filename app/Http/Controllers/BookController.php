@@ -44,8 +44,8 @@ public function index(Request $request)
             'isbn' => 'required|unique:books,isbn',
             'cmimi' => 'required|numeric',
             'sasia' => 'required|integer',
-            'author_id' => 'required|exists:authors,author_id',
-            'category_id' => 'required|exists:categories,kategori_id',
+            'author_id' => 'required|exists:authors,id',
+            'category_id' => 'required|exists:categories,id',
             'pershkrimi' => 'nullable'
         ]);
 
@@ -73,8 +73,8 @@ public function update(Request $request, string $id)
         'isbn' => 'required|unique:books,isbn,' . $book->book_id . ',book_id',
         'cmimi' => 'required|numeric',
         'sasia' => 'required|integer',
-        'author_id' => 'required|exists:authors,author_id',
-        'category_id' => 'required|exists:categories,kategori_id',
+        'author_id' => 'required|exists:authors,id',
+        'category_id' => 'required|exists:categories,id',
         'pershkrimi' => 'nullable'
     ]);
 
@@ -93,9 +93,19 @@ public function destroy(string $id)
 }
 public function show($id)
 {
-    // E marrim librin bashkë me autorin, kategorinë dhe vlerësimet (bashkë me emrat e përdoruesve)
     $book = Book::with(['author', 'category', 'reviews.user'])->findOrFail($id);
-    
-    return view('books.show', compact('book'));
+    // Klientët shikojnë view-in e klientit, adminët shikojnë view-in e adminit
+    if (auth()->user()->is_admin) {
+        return view('books.show', compact('book'));
+    }
+    return view('client.book_show', compact('book'));
+}
+
+// Shfletim për klientë
+public function browse()
+{
+    $books      = Book::with(['author', 'category'])->withAvg('reviews', 'nota')->get();
+    $categories = \App\Models\Category::orderBy('emri')->get();
+    return view('client.browse', compact('books', 'categories'));
 }
 }
