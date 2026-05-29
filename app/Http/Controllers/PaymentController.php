@@ -18,7 +18,7 @@ class PaymentController extends Controller
     // 1. Shfaqja e formes se checkout
     public function checkout($book_id)
     {
-        $book = Book::where('book_id', $book_id)->firstOrFail();
+        $book = Book::findOrFail($book_id);
         return view('payments.checkout', compact('book'));
     }
 
@@ -28,11 +28,11 @@ class PaymentController extends Controller
         Payment::create([
             'user_id' => Auth::id(),
             'book_id' => $request->book_id,
-            'shuma' => $request->shuma,
-            'metoda_pageses' => 'Kredit Kartel',
-            'statusi' => 'e perfunduar'
+            'shuma'   => $request->shuma,
+            'metoda_pageses' => 'Kartë Krediti',
+            'statusi' => 'e perfunduar',
         ]);
 
-        return redirect()->route('books.index')->with('success', 'Pagesa u krye me sukses!');
+        return redirect()->route('payments.index')->with('success', 'Pagesa u krye me sukses! Libri është i juaji.');
     }
 }

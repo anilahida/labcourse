@@ -16,7 +16,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Rrugët e Librave për KLIENTË (shfletim + detaje)
 Route::middleware('auth')->group(function () {
     Route::get('/browse',      [BookController::class, 'browse'])->name('books.browse');
-    Route::get('/books/{id}',  [BookController::class, 'show'])->name('books.show');
+    Route::get('/books/{id}',  [BookController::class, 'show'])->name('books.show')->where('id', '[0-9]+');
     Route::post('/payments/checkout/{book_id}', [PaymentController::class, 'process'])->name('payments.process');
     Route::get('/payments/checkout/{book_id}',  [PaymentController::class, 'checkout'])->name('payments.checkout');
 });
