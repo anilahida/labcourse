@@ -321,21 +321,30 @@ $coverColors = [
                     <span class="bc-price">€{{ number_format($book->cmimi,0) }}</span>
                 </div>
                 <div class="bc-actions">
-                    <a href="{{ route('books.show', $book->id) }}" class="bc-btn">
-                        <i class="bi bi-bag-fill"></i> Shto në shportë
-                    </a>
                     @auth
-                    <form action="{{ route('wishlist.store') }}" method="POST" style="display:contents;">
-                        @csrf
-                        <input type="hidden" name="book_id" value="{{ $book->id }}">
-                        <button type="submit" class="bc-btn-wish" title="Shto në wishlist">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                    </form>
+                        @if(!Auth::user()->is_admin)
+                            <a href="{{ route('books.show', $book->id) }}" class="bc-btn">
+                                <i class="bi bi-bag-fill"></i> Shto në shportë
+                            </a>
+                            <form action="{{ route('wishlist.store') }}" method="POST" style="display:contents;">
+                                @csrf
+                                <input type="hidden" name="book_id" value="{{ $book->id }}">
+                                <button type="submit" class="bc-btn-wish" title="Shto në wishlist">
+                                    <i class="bi bi-heart-fill"></i>
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('books.index') }}" class="bc-btn">
+                                <i class="bi bi-pencil-fill"></i> Menaxho
+                            </a>
+                        @endif
                     @else
-                    <a href="{{ route('login') }}" class="bc-btn-wish" title="Hyr për wishlist">
-                        <i class="bi bi-heart"></i>
-                    </a>
+                        <a href="{{ route('login') }}" class="bc-btn">
+                            <i class="bi bi-bag-fill"></i> Shto në shportë
+                        </a>
+                        <a href="{{ route('login') }}" class="bc-btn-wish" title="Hyr për wishlist">
+                            <i class="bi bi-heart"></i>
+                        </a>
                     @endauth
                 </div>
             </div>

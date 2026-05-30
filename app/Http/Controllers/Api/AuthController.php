@@ -18,24 +18,7 @@ class AuthController extends Controller
     {
         $this->middleware('auth:api')->only(['logout', 'refresh', 'me']);
     }
-    /**
-     * @OA\Post(
-     *     path="/api/auth/register",
-     *     tags={"Auth"},
-     *     summary="Regjistro përdorues të ri",
-     *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"name","email","password","password_confirmation"},
-     *             @OA\Property(property="name",                  type="string",  example="Anila Hida"),
-     *             @OA\Property(property="email",                 type="string",  example="anila@test.com"),
-     *             @OA\Property(property="password",              type="string",  example="secret123"),
-     *             @OA\Property(property="password_confirmation", type="string",  example="secret123")
-     *         )
-     *     ),
-     *     @OA\Response(response=201, description="Regjistrim i suksesshëm", @OA\JsonContent(ref="#/components/schemas/TokenResponse")),
-     *     @OA\Response(response=422, description="Validim dështoi",         @OA\JsonContent(ref="#/components/schemas/ErrorResponse"))
-     * )
-     */
+   
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -78,22 +61,7 @@ class AuthController extends Controller
         ], 201);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/auth/login",
-     *     tags={"Auth"},
-     *     summary="Hyr me email dhe fjalëkalim",
-     *     @OA\RequestBody(required=true,
-     *         @OA\JsonContent(
-     *             required={"email","password"},
-     *             @OA\Property(property="email",    type="string", example="admin@test.com"),
-     *             @OA\Property(property="password", type="string", example="password")
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Hyrje e suksesshme",           @OA\JsonContent(ref="#/components/schemas/TokenResponse")),
-     *     @OA\Response(response=401, description="Kredenciale të gabuara",        @OA\JsonContent(ref="#/components/schemas/ErrorResponse"))
-     * )
-     */
+   
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -131,16 +99,7 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/auth/logout",
-     *     tags={"Auth"},
-     *     summary="Dil dhe invalido token-in (blacklist)",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Logout i suksesshëm",   @OA\JsonContent(@OA\Property(property="success",type="boolean",example=true),@OA\Property(property="message",type="string",example="Token-i u invalidua."))),
-     *     @OA\Response(response=401, description="Token i pavlefshëm",    @OA\JsonContent(ref="#/components/schemas/ErrorResponse"))
-     * )
-     */
+   
     public function logout()
     {
         try {
@@ -160,16 +119,7 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/auth/refresh",
-     *     tags={"Auth"},
-     *     summary="Rifresko access token (blackliston token-in e vjetër)",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Token i ri",         @OA\JsonContent(@OA\Property(property="success",type="boolean",example=true),@OA\Property(property="access_token",type="string",example="eyJ0eXAi..."),@OA\Property(property="expires_in",type="integer",example=3600))),
-     *     @OA\Response(response=401, description="Token i skaduar",    @OA\JsonContent(ref="#/components/schemas/ErrorResponse"))
-     * )
-     */
+    
     public function refresh()
     {
         try {
@@ -200,16 +150,7 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/auth/me",
-     *     tags={"Auth"},
-     *     summary="Merr profilin e përdoruesit të kyçur",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response=200, description="Profili i përdoruesit", @OA\JsonContent(@OA\Property(property="success",type="boolean",example=true),@OA\Property(property="user",ref="#/components/schemas/UserShort"))),
-     *     @OA\Response(response=401, description="Pa autentifikim",       @OA\JsonContent(ref="#/components/schemas/ErrorResponse"))
-     * )
-     */
+    
     public function me()
     {
         $user = auth('api')->user();

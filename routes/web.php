@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{AuthorController, BookController, CategoryController, OrderController,
-    WishlistController, ReviewController, PaymentController, ShipmentController, CouponController, HomeController};
+    WishlistController, ReviewController, PaymentController, ShipmentController, CouponController, HomeController, AddressController};
 
 Route::get('/', function () {
     $featuredBooks = \App\Models\Book::with('author')->withAvg('reviews','nota')->latest()->take(6)->get();
@@ -13,16 +13,13 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Rrugët e Librave për KLIENTË (shfletim + detaje)
-Route::middleware('auth')->group(function () {
+// Rrugët VETËM për KLIENTË (admini ridrejtohet te dashboardi)
+Route::middleware(['auth', 'client'])->group(function () {
     Route::get('/browse',      [BookController::class, 'browse'])->name('books.browse');
     Route::get('/books/{id}',  [BookController::class, 'show'])->name('books.show')->where('id', '[0-9]+');
     Route::post('/payments/checkout/{book_id}', [PaymentController::class, 'process'])->name('payments.process');
     Route::get('/payments/checkout/{book_id}',  [PaymentController::class, 'checkout'])->name('payments.checkout');
-});
 
-// Rrugët e Klientit
-Route::middleware('auth')->group(function () {
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
@@ -35,7 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
     Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
     Route::get('/shipments', [ShipmentController::class, 'index'])->name('shipments.index');
-    Route::get('/addresses', function () { return view('client.addresses'); })->name('addresses.index');
+    Route::get('/addresses',              [AddressController::class, 'index'])->name('addresses.index');
+    Route::post('/addresses',             [AddressController::class, 'store'])->name('addresses.store');
+    Route::delete('/addresses/{id}',      [AddressController::class, 'destroy'])->name('addresses.destroy');
+    Route::post('/addresses/{id}/default',[AddressController::class, 'setDefault'])->name('addresses.default');
 });
 
 // Rrugët e Adminit
