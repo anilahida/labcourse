@@ -1,19 +1,30 @@
 import './bootstrap';
-import { createApp } from 'vue';
+import { createApp, defineAsyncComponent } from 'vue';
 
 const app = createApp({});
 
-// 1. Importo të gjithë komponentët (lart)
-import MainLayout from './components/MainLayout.vue';
-import OrderIndex from './components/OrderIndex.vue';
-import AuthorIndex from './components/AuthorIndex.vue';
-import CategoryIndex from './components/CategoryIndex.vue';
+// ── Eager imports (kritike, gjithmonë duhen) ─────────────────────────────
+import MainLayout    from './components/MainLayout.vue';
+import BookBrowse    from './components/BookBrowse.vue';
+import BookShow      from './components/BookShow.vue';
 
-// 2. Regjistro të gjithë komponentët
-app.component('main-layout', MainLayout);
-app.component('orders-index', OrderIndex);
-app.component('author-index', AuthorIndex);
-app.component('category-index', CategoryIndex);
+app.component('main-layout',  MainLayout);
+app.component('book-browse',  BookBrowse);
+app.component('book-show',    BookShow);
 
-// 3. Monto aplikacionin VETËM NË FUND
+// ── Lazy loading me defineAsyncComponent ─────────────────────────────────
+// Komponentët e adminit ngarkohen vetëm kur nevojiten (code splitting)
+app.component('orders-index', defineAsyncComponent({
+    loader: () => import('./components/OrderIndex.vue'),
+    delay: 0,
+}));
+app.component('author-index', defineAsyncComponent({
+    loader: () => import('./components/AuthorIndex.vue'),
+    delay: 0,
+}));
+app.component('category-index', defineAsyncComponent({
+    loader: () => import('./components/CategoryIndex.vue'),
+    delay: 0,
+}));
+
 app.mount('#app');

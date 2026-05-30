@@ -101,6 +101,49 @@ public function show($id)
     return view('client.book_show', compact('book'));
 }
 
+/**
+ * @OA\Get(
+ *     path="/api/books",
+ *     tags={"Books"},
+ *     summary="Merr listën e të gjithë librave",
+ *     @OA\Response(response=200, description="Lista e librave me autor, kategori dhe vlerësim mesatar",
+ *         @OA\JsonContent(type="array", @OA\Items(
+ *             @OA\Property(property="id",                type="integer", example=1),
+ *             @OA\Property(property="titulli",           type="string",  example="Gjenerali i Ushtrisë së Vdekur"),
+ *             @OA\Property(property="isbn",              type="string",  example="978-9928-08-000-1"),
+ *             @OA\Property(property="cmimi",             type="number",  example=14.99),
+ *             @OA\Property(property="sasia",             type="integer", example=5),
+ *             @OA\Property(property="reviews_avg_nota",  type="number",  example=4.7)
+ *         ))
+ *     )
+ * )
+ */
+// API — listë librash (JSON) për Vue
+public function apiIndex()
+{
+    $books = Book::with(['author', 'category'])
+                 ->withAvg('reviews', 'nota')
+                 ->get();
+    return response()->json($books);
+}
+
+/**
+ * @OA\Get(
+ *     path="/api/books/{id}",
+ *     tags={"Books"},
+ *     summary="Merr detajet e një libri me reviews",
+ *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer"), example=1),
+ *     @OA\Response(response=200, description="Libri me autor, kategori dhe reviews"),
+ *     @OA\Response(response=404, description="Libri nuk u gjet")
+ * )
+ */
+// API — libri i vetëm me reviews (JSON) për Vue
+public function apiShow($id)
+{
+    $book = Book::with(['author', 'category', 'reviews.user'])->findOrFail($id);
+    return response()->json($book);
+}
+
 // Shfletim për klientë
 public function browse()
 {

@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        window.appBase  = '{{ rtrim(url(""), "/") }}';
+        window.apiBase  = '{{ rtrim(url("/api"), "/") }}';
+        window.authUser = @json(['id' => Auth::id(), 'name' => Auth::user()->name ?? '', 'is_admin' => Auth::user()->is_admin ?? false]);
+    </script>
     <title>@yield('title', 'Biblioteka') — {{ config('app.name') }}</title>
     <link href="https://fonts.bunny.net/css?family=Nunito:400,500,600,700,800" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -131,6 +136,15 @@
             display: flex; align-items: center; justify-content: space-between;
         }
         .see-all { color: var(--cherry); font-size: 0.78rem; text-decoration: none; font-weight: 700; }
+
+        /* Gear dropdown items */
+        .drop-item {
+            display: flex; align-items: center; gap: 8px;
+            padding: .5rem 1rem; font-size: .82rem; font-weight: 600;
+            color: #444; text-decoration: none; transition: background .15s;
+        }
+        .drop-item:hover { background: #fff0f2; color: var(--cherry); }
+        .drop-item i { width: 16px; color: var(--cherry); }
     </style>
     @yield('styles')
 </head>
@@ -150,29 +164,39 @@
 
         <div class="cli-section-label">Biblioteka</div>
         <nav>
-            <a href="{{ url('/home') }}"
-               class="cli-nav-link {{ request()->is('home') || request()->is('client*') ? 'active' : '' }}">
-                <i class="bi bi-book-half"></i> Biblioteka Ime
+            <a href="{{ route('home') }}"
+               class="cli-nav-link {{ request()->is('home') ? 'active' : '' }}">
+                <i class="bi bi-grid-1x2-fill"></i> Biblioteka Ime
             </a>
-            <a href="#" class="cli-nav-link">
+            <a href="{{ route('books.browse') }}"
+               class="cli-nav-link {{ request()->is('browse*') ? 'active' : '' }}">
+                <i class="bi bi-book-half"></i> Shfleto Librat
+            </a>
+            <a href="{{ route('wishlist.index') }}"
+               class="cli-nav-link {{ request()->is('wishlist*') ? 'active' : '' }}">
                 <i class="bi bi-heart-fill"></i> Lista Dëshirave
             </a>
-            <a href="#" class="cli-nav-link">
+            <a href="{{ route('reviews.index') }}"
+               class="cli-nav-link {{ request()->is('reviews*') ? 'active' : '' }}">
                 <i class="bi bi-star-fill"></i> Vlerësimet
             </a>
         </nav>
         <div class="cli-section-label">Porositë</div>
         <nav>
-            <a href="#" class="cli-nav-link">
+            <a href="{{ route('shipments.index') }}"
+               class="cli-nav-link {{ request()->is('shipments*') ? 'active' : '' }}">
                 <i class="bi bi-truck-front-fill"></i> Dërgesat
             </a>
-            <a href="#" class="cli-nav-link">
+            <a href="{{ route('payments.index') }}"
+               class="cli-nav-link {{ request()->is('payments*') ? 'active' : '' }}">
                 <i class="bi bi-credit-card-2-front-fill"></i> Pagesat
             </a>
-            <a href="#" class="cli-nav-link">
+            <a href="{{ route('coupons.index') }}"
+               class="cli-nav-link {{ request()->is('coupons*') ? 'active' : '' }}">
                 <i class="bi bi-tag-fill"></i> Kuponat
             </a>
-            <a href="#" class="cli-nav-link">
+            <a href="{{ route('addresses.index') }}"
+               class="cli-nav-link {{ request()->is('addresses*') ? 'active' : '' }}">
                 <i class="bi bi-geo-alt-fill"></i> Adresat
             </a>
         </nav>
@@ -193,13 +217,43 @@
                 <h5 class="fw-bold mb-0">@yield('page-title', 'Biblioteka Ime')</h5>
                 <p class="text-muted mb-0" style="font-size:0.8rem;">@yield('page-sub', '')</p>
             </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm border-0" style="background:#fff;border-radius:10px;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;">
-                    <i class="bi bi-bell text-muted"></i>
-                </button>
-                <button class="btn btn-sm border-0" style="background:#fff;border-radius:10px;width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;">
-                    <i class="bi bi-gear text-muted"></i>
-                </button>
+            <div style="display:flex;gap:8px;position:relative;">
+
+                {{-- Bell --}}
+                <div style="position:relative;">
+                    <button id="js-btn-bell" style="background:#fff;border:none;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                        <i class="bi bi-bell" style="color:#888;font-size:1rem;"></i>
+                    </button>
+                    <div id="js-drop-bell" style="display:none;position:absolute;top:calc(100% + 8px);right:0;width:240px;background:white;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.12);border:1px solid #f0ebe8;z-index:2000;overflow:hidden;">
+                        <div style="padding:.6rem 1rem .45rem;font-weight:800;font-size:.82rem;border-bottom:1px solid #f0ebe8;">Njoftimet</div>
+                        <div style="padding:1.75rem 1rem;text-align:center;color:#ccc;">
+                            <i class="bi bi-bell-slash" style="font-size:1.8rem;display:block;margin-bottom:.5rem;"></i>
+                            <span style="font-size:.78rem;">Nuk ka njoftime të reja</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Gear --}}
+                <div style="position:relative;">
+                    <button id="js-btn-gear" style="background:#fff;border:none;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                        <i class="bi bi-gear" style="color:#888;font-size:1rem;"></i>
+                    </button>
+                    <div id="js-drop-gear" style="display:none;position:absolute;top:calc(100% + 8px);right:0;min-width:190px;background:white;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.12);border:1px solid #f0ebe8;z-index:2000;overflow:hidden;">
+                        <div style="padding:.6rem 1rem .45rem;font-weight:800;font-size:.82rem;border-bottom:1px solid #f0ebe8;">{{ Auth::user()->name }}</div>
+                        <a href="{{ route('home') }}"           class="drop-item"><i class="bi bi-person-fill"></i> Profili im</a>
+                        <a href="{{ route('payments.index') }}" class="drop-item"><i class="bi bi-credit-card-2-front-fill"></i> Pagesat</a>
+                        <a href="{{ route('addresses.index') }}" class="drop-item"><i class="bi bi-geo-alt-fill"></i> Adresat</a>
+                        <div style="border-top:1px solid #f5f0ec;margin-top:4px;padding-top:4px;">
+                            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+                                @csrf
+                                <button type="submit" class="drop-item" style="color:var(--cherry);background:none;border:none;width:100%;cursor:pointer;font-family:'Nunito',sans-serif;">
+                                    <i class="bi bi-box-arrow-right"></i> Dil
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <main class="cli-content">
@@ -207,5 +261,33 @@
         </main>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function setupDrop(btnId, dropId) {
+        var btn  = document.getElementById(btnId);
+        var drop = document.getElementById(dropId);
+        if (!btn || !drop) return;
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isOpen = drop.style.display === 'block';
+            ['js-drop-bell','js-drop-gear'].forEach(function(id){
+                var el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            drop.style.display = isOpen ? 'none' : 'block';
+        });
+    }
+    setupDrop('js-btn-bell', 'js-drop-bell');
+    setupDrop('js-btn-gear', 'js-drop-gear');
+    document.addEventListener('click', function () {
+        ['js-drop-bell','js-drop-gear'].forEach(function(id){
+            var el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+    });
+});
+</script>
+@yield('scripts')
 </body>
 </html>

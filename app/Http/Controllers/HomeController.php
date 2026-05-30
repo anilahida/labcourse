@@ -24,9 +24,33 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role === 'admin') {
+        if (Auth::user()->is_admin) {
             return view('admin.dashboard');
         }
-        return view('client.library');
+
+        $user = Auth::user();
+
+        // Librat e blerë (nga pagesat)
+        $myBooks = \App\Models\Payment::where('user_id', $user->id)
+            ->with('book.author')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Wishlist
+        $wishlistItems = \App\Models\Wishlist::where('user_id', $user->id)
+            ->with('book')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        // Pagesat recente
+        $recentPayments = \App\Models\Payment::where('user_id', $user->id)
+            ->with('book')
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('client.library', compact('myBooks', 'wishlistItems', 'recentPayments'));
     }
 }
