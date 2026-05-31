@@ -19,9 +19,10 @@ class ClientController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:clients,email',
+             'phone' => 'nullable|string|max:20'
              ]);
 
-        return Client::create($validated);
+        return response()->json(Client::create($validated), 201);
     }
 
     // 3. Shfaq nje klient specifik
@@ -34,7 +35,7 @@ class ClientController extends Controller
     public function update(Request $request, string $id)
     {
         $client = Client::findOrFail($id);
-        $client->update($request->all());
+        $client->update($request->only(['name', 'email', 'phone']));
         return $client;
     }
 
