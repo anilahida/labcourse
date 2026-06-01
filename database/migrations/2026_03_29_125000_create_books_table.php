@@ -21,7 +21,7 @@ return new class extends Migration
         $table->integer('sasia');
         
         // Lidhjet me tabelat tjera (Foreign Keys)
-      $table->foreignId('author_id')->constrained('authors')->onDelete('cascade');
+      
       $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
 
         $table->timestamps();
