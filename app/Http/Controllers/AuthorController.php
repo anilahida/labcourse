@@ -28,6 +28,11 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'emri'    => 'required|string|max:255',
+            'mbiemri' => 'required|string|max:255',
+        ]);
+
         $author = new Author();
         $author->emri = $request->input('emri');
         $author->mbiemri = $request->input('mbiemri');

@@ -13,10 +13,14 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+// Route e hapur për të gjithë të loguar (admin + klient)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/books/{id}',  [BookController::class, 'show'])->name('books.show')->where('id', '[0-9]+');
+});
+
 // Rrugët VETËM për KLIENTË (admini ridrejtohet te dashboardi)
 Route::middleware(['auth', 'client'])->group(function () {
     Route::get('/browse',      [BookController::class, 'browse'])->name('books.browse');
-    Route::get('/books/{id}',  [BookController::class, 'show'])->name('books.show')->where('id', '[0-9]+');
     Route::post('/payments/checkout/{book_id}', [PaymentController::class, 'process'])->name('payments.process');
     Route::get('/payments/checkout/{book_id}',  [PaymentController::class, 'checkout'])->name('payments.checkout');
 

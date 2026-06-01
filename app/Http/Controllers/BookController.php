@@ -70,7 +70,7 @@ public function update(Request $request, string $id)
 
     $validatedData = $request->validate([
         'titulli' => 'required|max:255',
-        'isbn' => 'required|unique:books,isbn,' . $book->book_id . ',book_id',
+        'isbn' => 'required|unique:books,isbn,' . $book->id,
         'cmimi' => 'required|numeric',
         'sasia' => 'required|integer',
         'author_id' => 'required|exists:authors,id',
